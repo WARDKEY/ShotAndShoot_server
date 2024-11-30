@@ -19,5 +19,4 @@ public class AiController {
 
         return chatModel.call(prompt);
     }
-
 }
