@@ -1,13 +1,15 @@
 package com.example.ShotAndShoot.domain.ai;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/ai")
+@Slf4j
+@RequestMapping("/api/v1/ai")
 @RestController
 @RequiredArgsConstructor
 public class AiController {
@@ -17,6 +19,12 @@ public class AiController {
     @PostMapping("/test")
     public String test(@RequestBody String prompt) {
 
-        return chatModel.call(prompt);
+        log.info("prompt = " + prompt);
+
+        String response = chatModel.call(prompt);
+
+        log.info(response);
+
+        return response;
     }
 }
