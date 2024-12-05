@@ -38,7 +38,7 @@ public class Question extends BaseTime {
     @Column(name = "view", nullable = false)
     private Integer view;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
@@ -49,5 +49,9 @@ public class Question extends BaseTime {
         this.category = category;
         this.view = view;
         this.member = member;
+    }
+
+    public void updateView() {
+        this.view += 1;
     }
 }
