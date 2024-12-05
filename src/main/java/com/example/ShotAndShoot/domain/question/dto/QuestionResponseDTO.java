@@ -1,7 +1,7 @@
 package com.example.ShotAndShoot.domain.question.dto;
 
-import com.example.ShotAndShoot.global.entity.Member;
 import com.example.ShotAndShoot.global.entity.Question;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +17,7 @@ public class QuestionResponseDTO {
     private String category;
     private Integer view;
     private String member;
+    private LocalDateTime createAt;
 
     public QuestionResponseDTO(Question question) {
         this.questionId = question.getQuestionId();
@@ -25,5 +26,6 @@ public class QuestionResponseDTO {
         this.category = question.getCategory();
         this.view = question.getView();
         this.member = question.getMember().getName();
+        this.createAt = question.getCreateAt();
     }
 }
