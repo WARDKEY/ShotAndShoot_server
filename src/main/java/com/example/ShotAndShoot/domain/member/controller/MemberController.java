@@ -25,17 +25,6 @@ public class MemberController {
 
     private final MemberService memberService;
 
-
-    /**
-     * 모든 회원 단순 조회
-     * @return
-     */
-    @GetMapping("/list")
-    public ResponseEntity<List<MemberResponseDTO>> getAllMember(){
-        List<MemberResponseDTO> members = memberService.getAllMember();
-        return new ResponseEntity<>(members, HttpStatus.OK);
-    }
-
     /**
      * 회원가입, 시큐리티 적용 전 임시 데이터 저장용
      *
@@ -43,28 +32,29 @@ public class MemberController {
      */
     @PostMapping("/register")
     public ResponseEntity<ResultMessageDTO> register(@RequestBody MemberRequestDTO memberRequestDTO) {
-        try {
-            String message = memberService.register(memberRequestDTO);
-            return new ResponseEntity<>(new ResultMessageDTO(message), HttpStatus.OK);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<>(new ResultMessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
-        }
+        String message = memberService.register(memberRequestDTO);
+        return new ResponseEntity<>(new ResultMessageDTO(message), HttpStatus.OK);
+    }
+
+    /**
+     * 모든 회원 단순 조회
+     *
+     * @return
+     */
+    @GetMapping("/list")
+    public ResponseEntity<List<MemberResponseDTO>> getAllMember() {
+        List<MemberResponseDTO> members = memberService.getAllMember();
+        return new ResponseEntity<>(members, HttpStatus.OK);
     }
 
     /**
      * 회원탈퇴, 수정필요
+     *
      * @param memberId
      */
     @DeleteMapping("/unregister/{memberId}")
     public ResponseEntity<ResultMessageDTO> unregister(@PathVariable Long memberId) {
-        try {
-            String message = memberService.unregister(memberId);
-            return new ResponseEntity<>(new ResultMessageDTO(message), HttpStatus.OK);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<>(new ResultMessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
-        }
+        String message = memberService.unregister(memberId);
+        return new ResponseEntity<>(new ResultMessageDTO(message), HttpStatus.OK);
     }
-
 }
