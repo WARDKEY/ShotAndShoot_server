@@ -11,4 +11,5 @@ public class ShotAndShootApplication {
     public static void main(String[] args) {
         SpringApplication.run(ShotAndShootApplication.class, args);
     }
+
 }
