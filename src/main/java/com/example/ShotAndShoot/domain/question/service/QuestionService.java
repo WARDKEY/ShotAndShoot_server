@@ -47,7 +47,7 @@ public class QuestionService {
                 .toList();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public QuestionResponseDTO getQuestion(Long questionId) {
 
         Question question = questionRepository.findById(questionId)
