@@ -9,12 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -54,5 +49,30 @@ public class QuestionController {
     public ResponseEntity<QuestionResponseDTO> getQuestion(@PathVariable Long questionId) {
         QuestionResponseDTO question = questionService.getQuestion(questionId);
         return new ResponseEntity<>(question, HttpStatus.OK);
+    }
+
+    /**
+     * questionId에 해당하는 질문 수정
+     *
+     * @param questionId
+     * @param questionRequestDTO
+     * @return
+     */
+    @PutMapping("/{questionId}")
+    public ResponseEntity<ResultMessageDTO> updateQuestion(@PathVariable Long questionId, @RequestBody QuestionRequestDTO questionRequestDTO  ) {
+        String message = questionService.updateQuestion(questionId, questionRequestDTO);
+        return new ResponseEntity<>(new ResultMessageDTO(message), HttpStatus.OK);
+    }
+
+    /**
+     * questionId에 해당하는 질문 삭제
+     *
+     * @param questionId
+     * @return
+     */
+    @DeleteMapping("/{questionId}")
+    public ResponseEntity<ResultMessageDTO> deleteQuestion(@PathVariable Long questionId) {
+        String message = questionService.deleteQuestion(questionId);
+        return new ResponseEntity<>(new ResultMessageDTO(message), HttpStatus.OK);
     }
 }
