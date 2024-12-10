@@ -23,7 +23,8 @@ public class WasteCompany {
     @Column(name = "phone_number", nullable = false, columnDefinition = "VARCHAR(25)")
     private String phoneNumber;
 
-    @Builder WasteCompany(String wasteCompanyName, String phoneNumber) {
+    @Builder
+    public WasteCompany(String wasteCompanyName, String phoneNumber) {
         this.wasteCompanyName = wasteCompanyName;
         this.phoneNumber = phoneNumber;
     }

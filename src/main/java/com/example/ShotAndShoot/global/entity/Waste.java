@@ -23,7 +23,8 @@ public class Waste {
     @Column(name= "waste_sorting_info", nullable = false, columnDefinition = "TEXT")
     private String wasteSortingInfo;
 
-    @Builder Waste(String wasteName, String wasteSortingInfo) {
+    @Builder
+    public Waste(String wasteName, String wasteSortingInfo) {
         this.wasteName = wasteName;
         this.wasteSortingInfo = wasteSortingInfo;
     }
