@@ -20,7 +20,6 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
-    private final CommentRepository commentRepository;
 
     @PostMapping("/{questionId}")
     public ResponseEntity<ResultMessageDTO> saveComment(@PathVariable("questionId") Long questionId,
