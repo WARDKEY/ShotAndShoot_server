@@ -54,4 +54,16 @@ public class Question extends BaseTime {
     public void updateView() {
         this.view += 1;
     }
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+    public void updateCategory(String category) {
+        this.category = category;
+    }
 }
