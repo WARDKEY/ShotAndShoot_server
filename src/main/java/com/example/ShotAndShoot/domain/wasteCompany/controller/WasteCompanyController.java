@@ -4,6 +4,7 @@ import com.example.ShotAndShoot.domain.wasteCompany.dto.WasteCompanyResponseDTO;
 import com.example.ShotAndShoot.domain.wasteCompany.service.WasteCompanyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,6 @@ public class WasteCompanyController {
     @GetMapping("/")
     public ResponseEntity<List<WasteCompanyResponseDTO>> getAllWasteCompany() {
         List<WasteCompanyResponseDTO> wasteCompanies = wasteCompanyService.getAllWasteCompany();
-        return ResponseEntity.ok(wasteCompanies);
+        return new ResponseEntity<>(wasteCompanies, HttpStatus.OK);
     }
 }
