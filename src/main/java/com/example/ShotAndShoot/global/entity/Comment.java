@@ -1,6 +1,6 @@
 package com.example.ShotAndShoot.global.entity;
 
-import com.example.ShotAndShoot.global.util.BaseTime;
+import com.example.ShotAndShoot.global.util.common.CreateTime;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "comment")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment extends BaseTime {
+public class Comment extends CreateTime {
 
     @Id
     @Column(name = "comment_id", nullable = false)
