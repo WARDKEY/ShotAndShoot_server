@@ -4,6 +4,7 @@ import com.example.ShotAndShoot.domain.question.dto.QuestionRequestDTO;
 import com.example.ShotAndShoot.domain.question.dto.QuestionResponseDTO;
 import com.example.ShotAndShoot.domain.question.service.QuestionService;
 import com.example.ShotAndShoot.global.dto.ResultMessageDTO;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,7 @@ public class QuestionController {
      * @param questionRequestDTO
      */
     @PostMapping("/")
-    public ResponseEntity<ResultMessageDTO> saveQuestion(@RequestBody QuestionRequestDTO questionRequestDTO) {
+    public ResponseEntity<ResultMessageDTO> saveQuestion(@RequestBody @Valid QuestionRequestDTO questionRequestDTO) {
         String message = questionService.saveQuestion(questionRequestDTO);
         return new ResponseEntity<>(new ResultMessageDTO(message), HttpStatus.OK);
     }
@@ -59,7 +60,7 @@ public class QuestionController {
      * @return
      */
     @PutMapping("/{questionId}")
-    public ResponseEntity<ResultMessageDTO> updateQuestion(@PathVariable Long questionId, @RequestBody QuestionRequestDTO questionRequestDTO  ) {
+    public ResponseEntity<ResultMessageDTO> updateQuestion(@PathVariable Long questionId, @RequestBody @Valid QuestionRequestDTO questionRequestDTO  ) {
         String message = questionService.updateQuestion(questionId, questionRequestDTO);
         return new ResponseEntity<>(new ResultMessageDTO(message), HttpStatus.OK);
     }
