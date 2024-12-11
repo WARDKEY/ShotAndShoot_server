@@ -5,6 +5,7 @@ import com.example.ShotAndShoot.domain.comment.dto.CommentResponseDTO;
 import com.example.ShotAndShoot.domain.comment.repository.CommentRepository;
 import com.example.ShotAndShoot.domain.comment.service.CommentService;
 import com.example.ShotAndShoot.global.dto.ResultMessageDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class CommentController {
 
     @PostMapping("/{questionId}")
     public ResponseEntity<ResultMessageDTO> saveComment(@PathVariable("questionId") Long questionId,
-                                                        @RequestBody CommentRequestDTO commentRequestDTO) {
+                                                        @RequestBody @Valid CommentRequestDTO commentRequestDTO) {
         String message = commentService.saveComment(questionId, commentRequestDTO);
         return new ResponseEntity<>(new ResultMessageDTO(message), HttpStatus.OK);
     }
