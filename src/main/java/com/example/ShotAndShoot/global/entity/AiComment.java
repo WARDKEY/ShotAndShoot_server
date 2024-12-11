@@ -1,6 +1,6 @@
 package com.example.ShotAndShoot.global.entity;
 
-import com.example.ShotAndShoot.global.util.BaseTime;
+import com.example.ShotAndShoot.global.util.common.CreateTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "ai_comment")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AiComment extends BaseTime {
+public class AiComment extends CreateTime {
 
     @Id
     @Column(name = "ai_comment_id")

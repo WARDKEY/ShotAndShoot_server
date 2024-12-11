@@ -1,4 +1,4 @@
-package com.example.ShotAndShoot.global.util;
+package com.example.ShotAndShoot.global.util.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -11,7 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @Getter
-public abstract class BaseTime {
+public abstract class CreateTime {
 
     @CreatedDate
     @Column(name = "create_at")

@@ -1,6 +1,7 @@
 package com.example.ShotAndShoot.global.entity;
 
-import com.example.ShotAndShoot.global.util.BaseTime;
+import com.example.ShotAndShoot.global.util.common.BaseTime;
+import com.example.ShotAndShoot.global.util.common.CreateTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
