@@ -1,22 +1,25 @@
 package com.example.ShotAndShoot.domain.wasteCompany.dto;
 
 import com.example.ShotAndShoot.global.entity.WasteCompany;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class WasteCompanyResponseDTO {
-    private Long wasteCompanyId;
-    private String wasteCompanyName;
-    private String phoneNumber;
 
-    public WasteCompanyResponseDTO(WasteCompany wasteCompany) {
-        this.wasteCompanyId = wasteCompany.getWasteCompanyId();
-        this.wasteCompanyName = wasteCompany.getWasteCompanyName();
-        this.phoneNumber = wasteCompany.getPhoneNumber();
+    private List<WasteCompanyDTO> wasteCompany;
 
+    public WasteCompanyResponseDTO(List<WasteCompanyDTO> wasteCompany) {
+        this.wasteCompany = wasteCompany;
+    }
+
+    @Builder
+    @Getter
+    public static class WasteCompanyDTO {
+        String wasteCompanyName;
+        String address;
+        String phoneNumber;
     }
 }

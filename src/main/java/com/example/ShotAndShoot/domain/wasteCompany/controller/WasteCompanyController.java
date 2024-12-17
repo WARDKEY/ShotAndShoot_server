@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.net.URISyntaxException;
 
 @Slf4j
 @RequestMapping("/api/v1/wasteCompany")
@@ -24,8 +24,9 @@ public class WasteCompanyController {
      * 폐기물업체 조회
      */
     @GetMapping("/")
-    public ResponseEntity<List<WasteCompanyResponseDTO>> getAllWasteCompany() {
-        List<WasteCompanyResponseDTO> wasteCompanies = wasteCompanyService.getAllWasteCompany();
-        return new ResponseEntity<>(wasteCompanies, HttpStatus.OK);
+    public ResponseEntity<WasteCompanyResponseDTO> getAllWasteCompany() throws URISyntaxException {
+        WasteCompanyResponseDTO response = wasteCompanyService.getAllWasteCompany();
+        log.info(response.toString());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
