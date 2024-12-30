@@ -23,9 +23,17 @@ public class WasteCompany {
     @Column(name = "phone_number", nullable = false, columnDefinition = "VARCHAR(25)")
     private String phoneNumber;
 
+    @Column(name = "lat", nullable = false, columnDefinition = "DOUBLE")
+    private double lat;
+
+    @Column(name = "lot", nullable = false, columnDefinition = "DOUBLE")
+    private double lot;
+
     @Builder
-    public WasteCompany(String wasteCompanyName, String phoneNumber) {
+    public WasteCompany(String wasteCompanyName, String phoneNumber, Double lat, Double lot) {
         this.wasteCompanyName = wasteCompanyName;
         this.phoneNumber = phoneNumber;
+        this.lat = lat;
+        this.lot = lot;
     }
 }

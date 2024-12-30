@@ -1,6 +1,5 @@
 package com.example.ShotAndShoot.domain.wasteCompany.dto;
 
-import com.example.ShotAndShoot.global.entity.WasteCompany;
 import lombok.*;
 
 import java.util.List;
@@ -21,5 +20,7 @@ public class WasteCompanyResponseDTO {
         String wasteCompanyName;
         String address;
         String phoneNumber;
+        String lat;
+        String lot;
     }
 }

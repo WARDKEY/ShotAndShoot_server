@@ -54,11 +54,15 @@ public class WasteCompanyService {
             String wasteCompanyName = (String) wasteCompany.get("flctNm");
             String address = (String) wasteCompany.get("lctnLotnoAddr");
             String phoneNumber = (String) wasteCompany.get("telno");
+            String lat = (String) wasteCompany.get("lat");
+            String lot = (String) wasteCompany.get("lot");
 
             WasteCompanyDTO wasteCompanyDTO =  WasteCompanyDTO.builder()
                     .wasteCompanyName(wasteCompanyName)
                     .address(address)
                     .phoneNumber(phoneNumber)
+                    .lat(lat)
+                    .lot(lot)
                     .build();
 
             wasteCompanies.add(wasteCompanyDTO);
