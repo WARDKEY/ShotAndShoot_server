@@ -1,5 +1,7 @@
 package com.example.ShotAndShoot.domain.member.service;
 
+import com.example.ShotAndShoot.domain.member.dto.KakaoRequestDTO;
+import com.example.ShotAndShoot.domain.member.dto.KakaoResponseDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberResponseDTO;
 import com.example.ShotAndShoot.domain.member.repsitory.MemberRepository;
@@ -49,5 +51,12 @@ public class MemberService {
         memberRepository.deleteById(memberId);
 
         return "회원탈퇴가 완료되었습니다.";
+    }
+
+    public KakaoResponseDTO getKakao(KakaoRequestDTO kakaoRequestDTO) {
+        if (kakaoRequestDTO.getKakaoId() == null){
+            throw new IllegalArgumentException("[ERROR]카카오 아이다가 존재하지 않습니다.");
+        }
+        return new KakaoResponseDTO(kakaoRequestDTO.getKakaoId(), kakaoRequestDTO.getNickName());
     }
 }
