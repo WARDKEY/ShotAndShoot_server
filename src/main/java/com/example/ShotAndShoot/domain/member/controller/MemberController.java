@@ -1,5 +1,7 @@
 package com.example.ShotAndShoot.domain.member.controller;
 
+import com.example.ShotAndShoot.domain.member.dto.KakaoRequestDTO;
+import com.example.ShotAndShoot.domain.member.dto.KakaoResponseDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberResponseDTO;
 import com.example.ShotAndShoot.domain.member.service.MemberService;
@@ -34,6 +36,12 @@ public class MemberController {
     public ResponseEntity<ResultMessageDTO> register(@RequestBody MemberRequestDTO memberRequestDTO) {
         String message = memberService.register(memberRequestDTO);
         return new ResponseEntity<>(new ResultMessageDTO(message), HttpStatus.OK);
+    }
+
+    @PostMapping("/kakaoLogin")
+    public ResponseEntity<KakaoResponseDTO> getKakaoId(@RequestBody KakaoRequestDTO kakaoRequestDTO){
+        KakaoResponseDTO kakao = memberService.getKakao(kakaoRequestDTO);
+        return new ResponseEntity<>(kakao, HttpStatus.OK);
     }
 
     /**
