@@ -3,7 +3,7 @@ package com.example.ShotAndShoot.domain.comment.service;
 import com.example.ShotAndShoot.domain.comment.dto.CommentRequestDTO;
 import com.example.ShotAndShoot.domain.comment.dto.CommentResponseDTO;
 import com.example.ShotAndShoot.domain.comment.repository.CommentRepository;
-import com.example.ShotAndShoot.domain.member.repsitory.MemberRepository;
+import com.example.ShotAndShoot.domain.member.repository.MemberRepository;
 import com.example.ShotAndShoot.domain.question.repository.QuestionRepository;
 import com.example.ShotAndShoot.global.entity.Comment;
 import com.example.ShotAndShoot.global.entity.Member;

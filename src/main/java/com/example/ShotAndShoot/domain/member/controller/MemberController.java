@@ -1,7 +1,7 @@
 package com.example.ShotAndShoot.domain.member.controller;
 
-import com.example.ShotAndShoot.domain.member.dto.KakaoRequestDTO;
-import com.example.ShotAndShoot.domain.member.dto.KakaoResponseDTO;
+import com.example.ShotAndShoot.domain.member.dto.LoginRequestDTO;
+import com.example.ShotAndShoot.domain.member.dto.LoginResponseDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberResponseDTO;
 import com.example.ShotAndShoot.domain.member.service.MemberService;
@@ -38,10 +38,26 @@ public class MemberController {
         return new ResponseEntity<>(new ResultMessageDTO(message), HttpStatus.OK);
     }
 
+    /**
+     * 카카오 로그인 사용자 정보 받기
+     * @param loginRequestDTO
+     * @return
+     */
     @PostMapping("/kakaoLogin")
-    public ResponseEntity<KakaoResponseDTO> getKakaoId(@RequestBody KakaoRequestDTO kakaoRequestDTO){
-        KakaoResponseDTO kakao = memberService.getKakao(kakaoRequestDTO);
+    public ResponseEntity<LoginResponseDTO> getKakaoId(@RequestBody LoginRequestDTO loginRequestDTO){
+        LoginResponseDTO kakao = memberService.getKakao(loginRequestDTO);
         return new ResponseEntity<>(kakao, HttpStatus.OK);
+    }
+
+    /**
+     * 구글 로그인 사용자 정보 받기
+     * @param loginRequestDTO
+     * @return
+     */
+    @PostMapping("/googleLogin")
+    public ResponseEntity<LoginResponseDTO> getGoogleId(@RequestBody LoginRequestDTO loginRequestDTO){
+        LoginResponseDTO google = memberService.getGoogle(loginRequestDTO);
+        return new ResponseEntity<>(google, HttpStatus.OK);
     }
 
     /**

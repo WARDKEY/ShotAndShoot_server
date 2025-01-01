@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class KakaoResponseDTO {
-    private Long kakaoId;
+public class LoginResponseDTO {
+    private String loginId;
     private String nickName;
 }
