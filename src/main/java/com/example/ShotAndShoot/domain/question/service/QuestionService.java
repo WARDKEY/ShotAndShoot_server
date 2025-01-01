@@ -1,6 +1,6 @@
 package com.example.ShotAndShoot.domain.question.service;
 
-import com.example.ShotAndShoot.domain.member.repsitory.MemberRepository;
+import com.example.ShotAndShoot.domain.member.repository.MemberRepository;
 import com.example.ShotAndShoot.domain.question.dto.QuestionRequestDTO;
 import com.example.ShotAndShoot.domain.question.dto.QuestionResponseDTO;
 import com.example.ShotAndShoot.domain.question.repository.QuestionRepository;

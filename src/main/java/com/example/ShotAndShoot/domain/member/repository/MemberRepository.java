@@ -1,4 +1,4 @@
-package com.example.ShotAndShoot.domain.member.repsitory;
+package com.example.ShotAndShoot.domain.member.repository;
 
 import com.example.ShotAndShoot.global.entity.Member;
 import java.util.Optional;
