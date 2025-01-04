@@ -1,6 +1,7 @@
 package com.example.ShotAndShoot.domain.question.service;
 
 import com.example.ShotAndShoot.domain.member.repository.MemberRepository;
+import com.example.ShotAndShoot.domain.member.service.MemberService;
 import com.example.ShotAndShoot.domain.question.dto.QuestionRequestDTO;
 import com.example.ShotAndShoot.domain.question.dto.QuestionResponseDTO;
 import com.example.ShotAndShoot.domain.question.repository.QuestionRepository;
@@ -21,12 +22,13 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
     private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
     @Transactional
     public String saveQuestion(QuestionRequestDTO questionRequestDTO) {
 
         // 임시 멤버값, 추후 DB에서 현재 로그인한 사용자를 가져와야 됨
-        Member member = memberRepository.findById(1L)
+        Member member = memberRepository.findById(memberService.getLoginMemberId())
                 .orElseThrow(() -> new IllegalArgumentException("[ERROR] 로그인을 해주세요."));
 
         Question question = Question.builder()

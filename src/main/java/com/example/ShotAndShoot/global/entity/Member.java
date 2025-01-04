@@ -6,10 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "member")
@@ -22,6 +19,9 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
 
+    @Column(name= "id", nullable = false, unique = true)
+    private String id;
+
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -31,10 +31,16 @@ public class Member {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
+    @Setter
+    @Column(name = "refresh_token")
+    private String refreshToken;
+
     @Builder
-    public Member(String name, String address, String phoneNumber) {
+    public Member(String id, String name, String address, String phoneNumber) {
+        this.id = id;
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
     }
+
 }

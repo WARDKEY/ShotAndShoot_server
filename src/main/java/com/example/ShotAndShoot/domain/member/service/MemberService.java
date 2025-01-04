@@ -7,7 +7,12 @@ import com.example.ShotAndShoot.domain.member.dto.MemberResponseDTO;
 import com.example.ShotAndShoot.domain.member.repository.MemberRepository;
 import com.example.ShotAndShoot.global.entity.Member;
 import java.util.List;
+import java.util.Optional;
+
+import com.example.ShotAndShoot.global.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,14 +21,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final TokenProvider tokenProvider;
 
     @Transactional
     public String register(MemberRequestDTO memberRequestDTO) {
-        if (memberRepository.findByName(memberRequestDTO.getName()).isPresent()) {
+        if (memberRepository.findById(memberRequestDTO.getId()).isPresent()) {
             throw new IllegalArgumentException("[ERROR] 이미 존재하는 회원입니다.");
         }
 
         Member member = Member.builder()
+                .id(memberRequestDTO.getId())
                 .name(memberRequestDTO.getName())
                 .address(memberRequestDTO.getAddress())
                 .phoneNumber(memberRequestDTO.getPhoneNumber())
@@ -35,6 +42,14 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
+    public MemberResponseDTO getMember() {
+        Member member = memberRepository.findById(getLoginMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 카카오 아이디가 존재하지 않습니다."));
+
+        return new MemberResponseDTO(member);
+    }
+
+    @Transactional(readOnly = true)
     public List<MemberResponseDTO> getAllMember() {
         return memberRepository.findAll().stream()
                 .map(MemberResponseDTO::new)
@@ -42,30 +57,78 @@ public class MemberService {
 
     }
 
-    @Transactional
-    public String unregister(Long memberId) {
-        if (memberRepository.findById(memberId).isEmpty()) {
-            throw new IllegalArgumentException("[ERROR] 존재하지 않는 회원입니다.");
-        }
-
-        memberRepository.deleteById(memberId);
-
-        return "회원탈퇴가 완료되었습니다.";
-    }
-
     public LoginResponseDTO getKakao(LoginRequestDTO loginRequestDTO) {
-        if (loginRequestDTO.getLoginId() == null) {
-            throw new IllegalArgumentException("[ERROR] 카카오 아이다가 존재하지 않습니다.");
-        }
+        Member member = memberRepository.findById(loginRequestDTO.getLoginId())
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 카카오 아이디가 존재하지 않습니다."));
+
+        member.setRefreshToken(loginRequestDTO.getRefreshToken());
+        memberRepository.save(member);
+
         System.out.println("카카오 로그인 완료");
         return new LoginResponseDTO(loginRequestDTO.getLoginId(), loginRequestDTO.getNickName());
+
     }
 
     public LoginResponseDTO getGoogle(LoginRequestDTO loginRequestDTO) {
-        if (loginRequestDTO.getLoginId() == null) {
-            throw new IllegalArgumentException("[ERROR] 구글 아이디가 존재하지 않습니다.");
-        }
+        Member member = memberRepository.findById(loginRequestDTO.getLoginId())
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 구글 아이디가 존재하지 않습니다."));
+
+        member.setRefreshToken(loginRequestDTO.getRefreshToken());
+        memberRepository.save(member);
+
         System.out.println("구글 로그인 완료");
         return new LoginResponseDTO(loginRequestDTO.getLoginId(), loginRequestDTO.getNickName());
+    }
+
+    @Transactional
+    public String logout() {
+        Member member = memberRepository.findById(getLoginMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 로그아웃에 실패하였습니다."));
+
+        member.setRefreshToken(null);
+        memberRepository.save(member);
+        SecurityContextHolder.getContext().setAuthentication(null);
+
+        return "로그아웃이 완료되었습니다.";
+    }
+
+    @Transactional
+    public String unregister() {
+        Member member = memberRepository.findById(getLoginMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 회원이 존재하지 않습니다."));
+
+        memberRepository.delete(member);
+        SecurityContextHolder.getContext().setAuthentication(null);
+
+        return "회원 탈퇴가 완료되었습니다.";
+    }
+
+    //AccessToken 검증 후 memberId 추출
+    public String getLoginMemberId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String userId = (String) authentication.getPrincipal();
+
+        return userId;
+    }
+
+    //RefreshToken 검증
+    public boolean isValidRefreshToken(String userId) {
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 해당 사용자가 없습니다."));
+
+        String refreshToken = member.getRefreshToken();
+
+        if (refreshToken != null) {
+            if (tokenProvider.validateToken(refreshToken)) {
+                return true;
+            } else {
+                System.out.println("refreshToken만료");
+                member.setRefreshToken(null);
+                memberRepository.save(member);
+                return false;
+            }
+        }
+        return false; // RefreshToken이 없음
     }
 }
