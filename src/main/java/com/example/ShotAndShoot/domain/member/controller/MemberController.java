@@ -7,13 +7,15 @@ import com.example.ShotAndShoot.domain.member.dto.MemberResponseDTO;
 import com.example.ShotAndShoot.domain.member.service.MemberService;
 import com.example.ShotAndShoot.global.dto.ResultMessageDTO;
 import java.util.List;
+
+import com.example.ShotAndShoot.global.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MemberController {
 
+    private final TokenProvider tokenProvider;
     private final MemberService memberService;
 
     /**
@@ -45,8 +48,23 @@ public class MemberController {
      */
     @PostMapping("/kakaoLogin")
     public ResponseEntity<LoginResponseDTO> getKakaoId(@RequestBody LoginRequestDTO loginRequestDTO){
-        LoginResponseDTO kakao = memberService.getKakao(loginRequestDTO);
-        return new ResponseEntity<>(kakao, HttpStatus.OK);
+        try {
+            String accessToken = tokenProvider.createAccessToken(loginRequestDTO.getLoginId());
+            String refreshToken = tokenProvider.createRefreshToken();
+
+            loginRequestDTO.setRefreshToken(refreshToken);
+
+            LoginResponseDTO kakao = memberService.getKakao(loginRequestDTO);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", "Bearer " + accessToken);
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(kakao);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.CREATED); // 201
+        }
     }
 
     /**
@@ -56,8 +74,34 @@ public class MemberController {
      */
     @PostMapping("/googleLogin")
     public ResponseEntity<LoginResponseDTO> getGoogleId(@RequestBody LoginRequestDTO loginRequestDTO){
-        LoginResponseDTO google = memberService.getGoogle(loginRequestDTO);
-        return new ResponseEntity<>(google, HttpStatus.OK);
+        try {
+            String accessToken = tokenProvider.createAccessToken(loginRequestDTO.getLoginId());
+            String refreshToken = tokenProvider.createRefreshToken();
+
+            loginRequestDTO.setRefreshToken(refreshToken);
+
+            LoginResponseDTO google = memberService.getGoogle(loginRequestDTO);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", "Bearer " + accessToken);
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(google);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.CREATED); // 201
+        }
+    }
+
+    /**
+     * 회원 조회[테스트]
+     *
+     * @return
+     */
+    @GetMapping("/")
+    public ResponseEntity<MemberResponseDTO> getMember() {
+        MemberResponseDTO member = memberService.getMember();
+        return new ResponseEntity<>(member, HttpStatus.OK);
     }
 
     /**
@@ -72,13 +116,23 @@ public class MemberController {
     }
 
     /**
+     * 회원 로그아웃
+     *
+     * @return
+     */
+    @PostMapping("/logout")
+    public ResponseEntity<ResultMessageDTO> logout() {
+        String message = memberService.logout();
+        return new ResponseEntity<>(new ResultMessageDTO(message), HttpStatus.OK);
+    }
+
+    /**
      * 회원탈퇴, 수정필요
      *
-     * @param memberId
      */
-    @DeleteMapping("/unregister/{memberId}")
-    public ResponseEntity<ResultMessageDTO> unregister(@PathVariable Long memberId) {
-        String message = memberService.unregister(memberId);
+    @DeleteMapping("/unregister")
+    public ResponseEntity<ResultMessageDTO> unregister() {
+        String message = memberService.unregister();
         return new ResponseEntity<>(new ResultMessageDTO(message), HttpStatus.OK);
     }
 }
