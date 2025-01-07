@@ -20,7 +20,7 @@ public class AiScanResponseDTO {
     @Getter
     public static class PredictionDTO{
         String category;
-        double reliability;
+        int count;
         String wasteSortingInfo;
     }
 }
