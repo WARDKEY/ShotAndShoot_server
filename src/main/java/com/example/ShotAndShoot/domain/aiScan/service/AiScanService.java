@@ -53,14 +53,14 @@ public class AiScanService {
 
         for (Map<String, Object> prediction : predictionsData) {
             String category = (String) prediction.get("class");
-            Double reliability = (Double) prediction.get("reliability");
+            Integer count = (Integer) prediction.get("count");
 
             Waste waste = wasteRepository.findByWasteName(category)
                     .orElseThrow(() -> new IllegalArgumentException("[ERROR] 폐기물 종류를 찾을 수 없습니다."));
 
             PredictionDTO predictionDTO = PredictionDTO.builder()
                     .category(category)
-                    .reliability(reliability)
+                    .count(count)
                     .wasteSortingInfo(waste.getWasteSortingInfo())
                     .build();
 

@@ -2,6 +2,7 @@ package com.example.ShotAndShoot.domain.wasteCompany.service;
 
 import com.example.ShotAndShoot.domain.wasteCompany.dto.WasteCompanyResponseDTO;
 import com.example.ShotAndShoot.domain.wasteCompany.dto.WasteCompanyResponseDTO.WasteCompanyDTO;
+import io.micrometer.common.lang.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,15 +16,13 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class WasteCompanyService {
+
     Map<String, Integer> dataMap = new HashMap<String, Integer>() {
         {
             put("서울특별시 중구", 3010000);
@@ -129,16 +128,19 @@ public class WasteCompanyService {
     private String apiKey;
 
     @Transactional(readOnly = true)
-    public WasteCompanyResponseDTO getAllWasteCompany() throws URISyntaxException {
+    public WasteCompanyResponseDTO getAllWasteCompany(@Nullable String location) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
 
-        String cAddr = "서울특별시 중구 아니야";
-        Integer code = 3010000;
+        int code;
 
-        for (String key : dataMap.keySet()) {
-            if (cAddr.contains(key)) {
-                code = dataMap.getOrDefault(key, 3010000);
-            }
+        if (location == null || location.isEmpty()) {
+            code = 3010000; // 기본 코드
+        } else {
+            code = dataMap.keySet().stream()
+                    .filter(location::contains)
+                    .findFirst()
+                    .map(dataMap::get)
+                    .orElse(3010000); // 기본 코드
         }
 
         String url = String.format("http://api.data.go.kr/openapi/tn_pubr_public_tret_was_api?instt_code=%d&type=json&serviceKey=%s", code, apiKey);
