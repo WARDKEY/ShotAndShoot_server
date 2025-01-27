@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 public class AiCommentResponseDTO {
     private Long aiCommentId;
     private String content;
-    private Question question;
+    private Long questionId;
 
     public AiCommentResponseDTO(AiComment aiComment) {
         this.aiCommentId = aiComment.getAiCommentId();
         this.content = aiComment.getContent();
-        this.question = aiComment.getQuestion();
+        this.questionId = aiComment.getQuestion().getQuestionId();
     }
 }

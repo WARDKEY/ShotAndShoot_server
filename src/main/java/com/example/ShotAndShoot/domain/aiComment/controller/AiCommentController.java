@@ -27,6 +27,7 @@ public class AiCommentController {
 
     /**
      * Ai 댓글 생성
+     * 사실상 안 씀
      *
      * @param questionid
      */
