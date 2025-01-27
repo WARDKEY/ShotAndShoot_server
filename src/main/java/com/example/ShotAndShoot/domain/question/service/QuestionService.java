@@ -1,5 +1,6 @@
 package com.example.ShotAndShoot.domain.question.service;
 
+import com.example.ShotAndShoot.domain.aiComment.service.AiCommentService;
 import com.example.ShotAndShoot.domain.member.repository.MemberRepository;
 import com.example.ShotAndShoot.domain.member.service.MemberService;
 import com.example.ShotAndShoot.domain.question.dto.QuestionRequestDTO;
@@ -23,11 +24,12 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final MemberRepository memberRepository;
     private final MemberService memberService;
+    private final AiCommentService aiCommentService;
 
     @Transactional
     public String saveQuestion(QuestionRequestDTO questionRequestDTO) {
 
-        // 임시 멤버값, 추후 DB에서 현재 로그인한 사용자를 가져와야 됨
+        // 현재 로그인한 유저 불러옴
         Member member = memberRepository.findById(memberService.getLoginMemberId())
                 .orElseThrow(() -> new IllegalArgumentException("[ERROR] 로그인을 해주세요."));
 
@@ -39,7 +41,13 @@ public class QuestionService {
                 .member(member)
                 .build();
 
+        // 질문 저장
         questionRepository.save(question);
+
+        // ai 댓글 생성
+        String aiMessage = aiCommentService.saveAiComment(question.getQuestionId());
+
+        log.info("ai 댓글 성공 여부 확인 ==== {}", aiMessage);
 
         return "질문 작성 완료.";
     }
