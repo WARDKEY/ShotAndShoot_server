@@ -1,7 +1,6 @@
 package com.example.ShotAndShoot.domain.aiComment.dto;
 
 import com.example.ShotAndShoot.global.entity.AiComment;
-import com.example.ShotAndShoot.global.entity.Question;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

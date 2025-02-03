@@ -1,6 +1,7 @@
 package com.example.ShotAndShoot.domain.comment.repository;
 
 import com.example.ShotAndShoot.global.entity.Comment;
+import com.example.ShotAndShoot.global.entity.Member;
 import com.example.ShotAndShoot.global.entity.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;

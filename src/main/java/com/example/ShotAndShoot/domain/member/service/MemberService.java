@@ -6,10 +6,8 @@ import com.example.ShotAndShoot.domain.member.dto.MemberRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberResponseDTO;
 import com.example.ShotAndShoot.domain.member.repository.MemberRepository;
 import com.example.ShotAndShoot.global.entity.Member;
-import java.util.List;
-import java.util.Optional;
-
 import com.example.ShotAndShoot.global.jwt.TokenProvider;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
