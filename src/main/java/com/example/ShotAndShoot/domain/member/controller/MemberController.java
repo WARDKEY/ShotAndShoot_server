@@ -4,11 +4,12 @@ import com.example.ShotAndShoot.domain.member.dto.LoginRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.LoginResponseDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberResponseDTO;
+import com.example.ShotAndShoot.domain.member.dto.TokenIdRequestDTO;
+import com.example.ShotAndShoot.domain.member.dto.TokenIdResponseDTO;
 import com.example.ShotAndShoot.domain.member.service.MemberService;
 import com.example.ShotAndShoot.global.dto.ResultMessageDTO;
-import java.util.List;
-
 import com.example.ShotAndShoot.global.jwt.TokenProvider;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -43,11 +44,12 @@ public class MemberController {
 
     /**
      * 카카오 로그인 사용자 정보 받기
+     *
      * @param loginRequestDTO
      * @return
      */
     @PostMapping("/kakaoLogin")
-    public ResponseEntity<LoginResponseDTO> getKakaoId(@RequestBody LoginRequestDTO loginRequestDTO){
+    public ResponseEntity<LoginResponseDTO> getKakaoId(@RequestBody LoginRequestDTO loginRequestDTO) {
         try {
             String accessToken = tokenProvider.createAccessToken(loginRequestDTO.getLoginId());
             String refreshToken = tokenProvider.createRefreshToken();
@@ -69,11 +71,12 @@ public class MemberController {
 
     /**
      * 구글 로그인 사용자 정보 받기
+     *
      * @param loginRequestDTO
      * @return
      */
     @PostMapping("/googleLogin")
-    public ResponseEntity<LoginResponseDTO> getGoogleId(@RequestBody LoginRequestDTO loginRequestDTO){
+    public ResponseEntity<LoginResponseDTO> getGoogleId(@RequestBody LoginRequestDTO loginRequestDTO) {
         try {
             String accessToken = tokenProvider.createAccessToken(loginRequestDTO.getLoginId());
             String refreshToken = tokenProvider.createRefreshToken();
@@ -128,11 +131,23 @@ public class MemberController {
 
     /**
      * 회원탈퇴, 수정필요
-     *
      */
     @DeleteMapping("/unregister")
     public ResponseEntity<ResultMessageDTO> unregister() {
         String message = memberService.unregister();
         return new ResponseEntity<>(new ResultMessageDTO(message), HttpStatus.OK);
+    }
+
+    /**
+     * 토큰으로 userId 조회
+     *
+     * @param tokenIdRequestDTO
+     * @return
+     */
+    @GetMapping("/token")
+    public ResponseEntity<TokenIdResponseDTO> getuserIdFromToken(@RequestBody TokenIdRequestDTO tokenIdRequestDTO) {
+        String userId = memberService.getUserIdFromToken(tokenIdRequestDTO);
+        return new ResponseEntity<>(new TokenIdResponseDTO(userId), HttpStatus.OK);
+
     }
 }

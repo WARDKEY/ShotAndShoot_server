@@ -4,12 +4,11 @@ import com.example.ShotAndShoot.domain.member.dto.LoginRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.LoginResponseDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberResponseDTO;
+import com.example.ShotAndShoot.domain.member.dto.TokenIdRequestDTO;
 import com.example.ShotAndShoot.domain.member.repository.MemberRepository;
 import com.example.ShotAndShoot.global.entity.Member;
-import java.util.List;
-import java.util.Optional;
-
 import com.example.ShotAndShoot.global.jwt.TokenProvider;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -130,5 +129,9 @@ public class MemberService {
             }
         }
         return false; // RefreshToken이 없음
+    }
+
+    public String getUserIdFromToken(TokenIdRequestDTO tokenIdRequestDTO) {
+        return tokenProvider.getUserIdFromToken(tokenIdRequestDTO.getToken());
     }
 }
