@@ -4,8 +4,7 @@ import com.example.ShotAndShoot.domain.member.dto.LoginRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.LoginResponseDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberResponseDTO;
-import com.example.ShotAndShoot.domain.member.dto.TokenIdRequestDTO;
-import com.example.ShotAndShoot.domain.member.dto.TokenIdResponseDTO;
+import com.example.ShotAndShoot.domain.member.dto.UserIdResponseDTO;
 import com.example.ShotAndShoot.domain.member.service.MemberService;
 import com.example.ShotAndShoot.global.dto.ResultMessageDTO;
 import com.example.ShotAndShoot.global.jwt.TokenProvider;
@@ -139,15 +138,13 @@ public class MemberController {
     }
 
     /**
-     * 토큰으로 userId 조회
+     * 현재 로그인한 member의 userId 조회
      *
-     * @param tokenIdRequestDTO
      * @return
      */
-    @GetMapping("/token")
-    public ResponseEntity<TokenIdResponseDTO> getuserIdFromToken(@RequestBody TokenIdRequestDTO tokenIdRequestDTO) {
-        String userId = memberService.getUserIdFromToken(tokenIdRequestDTO);
-        return new ResponseEntity<>(new TokenIdResponseDTO(userId), HttpStatus.OK);
-
+    @GetMapping("/user")
+    public ResponseEntity<UserIdResponseDTO> getUserId() {
+        String userId = memberService.getLoginMemberId();
+        return new ResponseEntity<>(new UserIdResponseDTO(userId), HttpStatus.OK);
     }
 }

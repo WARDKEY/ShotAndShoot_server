@@ -2,6 +2,7 @@ package com.example.ShotAndShoot.domain.comment.controller;
 
 import com.example.ShotAndShoot.domain.comment.dto.CommentRequestDTO;
 import com.example.ShotAndShoot.domain.comment.dto.CommentResponseDTO;
+import com.example.ShotAndShoot.domain.comment.dto.UseridFromCommentIdResponseDTO;
 import com.example.ShotAndShoot.domain.comment.repository.CommentRepository;
 import com.example.ShotAndShoot.domain.comment.service.CommentService;
 import com.example.ShotAndShoot.global.dto.ResultMessageDTO;
@@ -44,5 +45,16 @@ public class CommentController {
 
         String message = commentService.deleteComment(commentId);
         return new ResponseEntity<>(new ResultMessageDTO(message), HttpStatus.OK);
+    }
+
+    /**
+     * commentId로 userId 조회
+     * @param commentId
+     * @return
+     */
+    @GetMapping("/user/{commentId}")
+    public ResponseEntity<UseridFromCommentIdResponseDTO> getUserIdFromCommentId(@PathVariable("commentId") Long commentId){
+        String userId = commentService.getUserIdFromCommentId(commentId);
+        return new ResponseEntity<>(new UseridFromCommentIdResponseDTO(userId), HttpStatus.OK);
     }
 }

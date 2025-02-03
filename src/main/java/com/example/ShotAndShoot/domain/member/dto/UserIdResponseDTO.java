@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TokenIdResponseDTO {
+public class UserIdResponseDTO {
     private String userId;
 }

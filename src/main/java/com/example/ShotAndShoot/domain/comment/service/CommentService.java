@@ -81,4 +81,13 @@ public class CommentService {
         return "댓글 삭제 완료.";
     }
 
+    @Transactional(readOnly = true)
+    public String getUserIdFromCommentId(Long commentId) {
+        // comment 찾고
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다."));
+
+        // 해당 member의 userId 뽑음
+        return comment.getMember().getId();
+    }
 }
