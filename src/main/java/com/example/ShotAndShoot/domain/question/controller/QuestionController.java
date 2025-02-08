@@ -4,6 +4,7 @@ import com.example.ShotAndShoot.domain.question.dto.QuestionRequestDTO;
 import com.example.ShotAndShoot.domain.question.dto.QuestionResponseDTO;
 import com.example.ShotAndShoot.domain.question.service.QuestionService;
 import com.example.ShotAndShoot.global.dto.ResultMessageDTO;
+import com.example.ShotAndShoot.global.entity.Question;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +22,14 @@ public class QuestionController {
     private final QuestionService questionService;
 
     /**
-     * Question 작성, 로그인 정보로부터 멤버 불러오는 부분 추가해야됨
+     * Question 작성
      *
      * @param questionRequestDTO
      */
     @PostMapping("/")
-    public ResponseEntity<ResultMessageDTO> saveQuestion(@RequestBody @Valid QuestionRequestDTO questionRequestDTO) {
-        String message = questionService.saveQuestion(questionRequestDTO);
-        return new ResponseEntity<>(new ResultMessageDTO(message), HttpStatus.OK);
+    public ResponseEntity<QuestionResponseDTO> saveQuestion(@RequestBody @Valid QuestionRequestDTO questionRequestDTO) {
+        Question question = questionService.saveQuestion(questionRequestDTO);
+        return new ResponseEntity<>(new QuestionResponseDTO(question), HttpStatus.OK);
     }
 
     /**
@@ -38,6 +39,16 @@ public class QuestionController {
     public ResponseEntity<List<QuestionResponseDTO>> getAllQuestion() {
         List<QuestionResponseDTO> questions = questionService.getAllQuestion();
         return new ResponseEntity<>(questions, HttpStatus.OK);
+    }
+
+    /**
+     * 마이페이지 사용자가 작성한 질문 조회
+     * @return
+     */
+    @GetMapping("/my")
+    public ResponseEntity<List<QuestionResponseDTO>> getMyAllQuestion() {
+        List<QuestionResponseDTO> myQuestions = questionService.getMyAllQuestion();
+        return new ResponseEntity<>(myQuestions, HttpStatus.OK);
     }
 
     /**
@@ -60,7 +71,8 @@ public class QuestionController {
      * @return
      */
     @PutMapping("/{questionId}")
-    public ResponseEntity<ResultMessageDTO> updateQuestion(@PathVariable Long questionId, @RequestBody @Valid QuestionRequestDTO questionRequestDTO  ) {
+    public ResponseEntity<ResultMessageDTO> updateQuestion(@PathVariable Long questionId,
+                                                           @RequestBody @Valid QuestionRequestDTO questionRequestDTO) {
         String message = questionService.updateQuestion(questionId, questionRequestDTO);
         return new ResponseEntity<>(new ResultMessageDTO(message), HttpStatus.OK);
     }
