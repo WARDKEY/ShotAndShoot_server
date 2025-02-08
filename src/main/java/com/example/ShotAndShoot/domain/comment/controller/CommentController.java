@@ -6,6 +6,7 @@ import com.example.ShotAndShoot.domain.comment.dto.UseridFromCommentIdResponseDT
 import com.example.ShotAndShoot.domain.comment.repository.CommentRepository;
 import com.example.ShotAndShoot.domain.comment.service.CommentService;
 import com.example.ShotAndShoot.global.dto.ResultMessageDTO;
+import com.example.ShotAndShoot.global.entity.Comment;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,6 @@ public class CommentController {
 
     /**
      * question에 해당하는 댓글 조회
-     *
      */
     @GetMapping("/{questionId}")
     public ResponseEntity<List<CommentResponseDTO>> getComments(@PathVariable Long questionId) {
@@ -49,12 +49,25 @@ public class CommentController {
 
     /**
      * commentId로 userId 조회
+     *
      * @param commentId
      * @return
      */
     @GetMapping("/user/{commentId}")
-    public ResponseEntity<UseridFromCommentIdResponseDTO> getUserIdFromCommentId(@PathVariable("commentId") Long commentId){
+    public ResponseEntity<UseridFromCommentIdResponseDTO> getUserIdFromCommentId(
+            @PathVariable("commentId") Long commentId) {
         String userId = commentService.getUserIdFromCommentId(commentId);
         return new ResponseEntity<>(new UseridFromCommentIdResponseDTO(userId), HttpStatus.OK);
+    }
+
+    /**
+     * 마이페이지 사용자의 모든 댓글 조회
+     *
+     * @return
+     */
+    @GetMapping("/my")
+    public ResponseEntity<List<CommentResponseDTO>> getMyAllComments() {
+        List<CommentResponseDTO> myComments = commentService.getMyAllComments();
+        return new ResponseEntity<>(myComments, HttpStatus.OK);
     }
 }

@@ -90,4 +90,15 @@ public class CommentService {
         // 해당 member의 userId 뽑음
         return comment.getMember().getId();
     }
+
+    @Transactional(readOnly = true)
+    public List<CommentResponseDTO> getMyAllComments() {
+        // 현재 로그인한 사용자 정보 불러옴
+        Member member = memberRepository.findById(memberService.getLoginMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 로그인을 해주세요."));
+        // 해당 사용자의 모든 댓글 불러오기
+        List<Comment> myComments = commentRepository.findAllByMember(member);
+
+        return myComments.stream().map(CommentResponseDTO::new).toList();
+    }
 }
