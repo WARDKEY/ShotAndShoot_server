@@ -1,6 +1,7 @@
 package com.example.ShotAndShoot.domain.question.service;
 
 import com.example.ShotAndShoot.domain.aiComment.service.AiCommentService;
+import com.example.ShotAndShoot.domain.comment.repository.CommentRepository;
 import com.example.ShotAndShoot.domain.member.repository.MemberRepository;
 import com.example.ShotAndShoot.domain.member.service.MemberService;
 import com.example.ShotAndShoot.domain.question.dto.QuestionRequestDTO;
@@ -11,6 +12,7 @@ import com.example.ShotAndShoot.global.entity.Question;
 import java.util.List;
 
 import jakarta.persistence.EntityNotFoundException;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,12 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final MemberService memberService;
     private final AiCommentService aiCommentService;
 
     @Transactional
-    public String saveQuestion(QuestionRequestDTO questionRequestDTO) {
+    public Question saveQuestion(QuestionRequestDTO questionRequestDTO) {
 
         // 현재 로그인한 유저 불러옴
         Member member = memberRepository.findById(memberService.getLoginMemberId())
@@ -49,14 +52,17 @@ public class QuestionService {
 
         log.info("ai 댓글 성공 여부 확인 ==== {}", aiMessage);
 
-        return "질문 작성 완료.";
+        return question;
     }
 
     @Transactional(readOnly = true)
     public List<QuestionResponseDTO> getAllQuestion() {
         return questionRepository.findAllByOrderByCreateAt().stream()
-                .map(QuestionResponseDTO::new)
-                .toList();
+                .map(question -> {
+                    int commentsCount = commentRepository.countByQuestion(question);
+                    return new QuestionResponseDTO(question, commentsCount);
+                })
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -76,21 +82,21 @@ public class QuestionService {
     @Transactional
     public String updateQuestion(Long questionId, QuestionRequestDTO questionRequestDTO) {
         Question question = questionRepository.findById(questionId)
-                .orElseThrow(()-> new EntityNotFoundException(questionId + "번 question이 존재하지 않습니다"));
+                .orElseThrow(() -> new EntityNotFoundException(questionId + "번 question이 존재하지 않습니다"));
 
         // 임시 멤버값, 추후 DB에서 현재 로그인한 사용자를 가져와야 됨
-        Member member = memberRepository.findById(1L)
+        Member member = memberRepository.findById(memberService.getLoginMemberId())
                 .orElseThrow(() -> new IllegalArgumentException("[ERROR] 로그인을 해주세요."));
 
-        if(!question.getTitle().equals(questionRequestDTO.getTitle())) {
+        if (!question.getTitle().equals(questionRequestDTO.getTitle())) {
             question.updateTitle(questionRequestDTO.getTitle());
         }
 
-        if(!question.getContent().equals(questionRequestDTO.getContent())) {
+        if (!question.getContent().equals(questionRequestDTO.getContent())) {
             question.updateContent(questionRequestDTO.getContent());
         }
 
-        if(!question.getCategory().equals(questionRequestDTO.getCategory())) {
+        if (!question.getCategory().equals(questionRequestDTO.getCategory())) {
             question.updateCategory(questionRequestDTO.getCategory());
         }
 
@@ -104,5 +110,15 @@ public class QuestionService {
         questionRepository.deleteById(questionId);
 
         return "질문 삭제 완료.";
+    }
+
+    public List<QuestionResponseDTO> getMyAllQuestion() {
+        // 현재 로그인한 사용자 정보 불러옴
+        Member member = memberRepository.findById(memberService.getLoginMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 로그인을 해주세요."));
+        // 사용자가 작성한 question 불러옴
+        List<Question> myQuestions = questionRepository.findAllByMember(member);
+
+        return myQuestions.stream().map(QuestionResponseDTO::new).toList();
     }
 }
