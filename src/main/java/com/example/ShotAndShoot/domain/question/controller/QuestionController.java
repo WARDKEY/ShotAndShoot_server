@@ -43,12 +43,24 @@ public class QuestionController {
 
     /**
      * 마이페이지 사용자가 작성한 질문 조회
+     *
      * @return
      */
     @GetMapping("/my")
     public ResponseEntity<List<QuestionResponseDTO>> getMyAllQuestion() {
         List<QuestionResponseDTO> myQuestions = questionService.getMyAllQuestion();
         return new ResponseEntity<>(myQuestions, HttpStatus.OK);
+    }
+
+    /**
+     * 조회수를 기준으로 인기글 내림차순 정렬 및 조회
+     *
+     * @return
+     */
+    @GetMapping("/popular")
+    public ResponseEntity<List<QuestionResponseDTO>> getQuestionsSortedByPopularity() {
+        List<QuestionResponseDTO> popularQuestions = questionService.getQuestionsSortedByPopularity();
+        return new ResponseEntity<>(popularQuestions, HttpStatus.OK);
     }
 
     /**
