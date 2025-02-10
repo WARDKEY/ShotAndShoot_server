@@ -57,7 +57,7 @@ public class QuestionService {
 
     @Transactional(readOnly = true)
     public List<QuestionResponseDTO> getAllQuestion() {
-        return questionRepository.findAllByOrderByCreateAt().stream()
+        return questionRepository.findAllByOrderByCreateAtDesc().stream()
                 .map(question -> {
                     int commentsCount = commentRepository.countByQuestion(question);
                     return new QuestionResponseDTO(question, commentsCount);
@@ -120,5 +120,11 @@ public class QuestionService {
         List<Question> myQuestions = questionRepository.findAllByMember(member);
 
         return myQuestions.stream().map(QuestionResponseDTO::new).toList();
+    }
+
+    public List<QuestionResponseDTO> getQuestionsSortedByPopularity() {
+        List<Question> popularQuestions = questionRepository.findAllByOrderByViewDesc();
+
+        return popularQuestions.stream().map(QuestionResponseDTO::new).toList();
     }
 }
