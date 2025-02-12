@@ -1,7 +1,11 @@
 package com.example.ShotAndShoot.domain.wasteCompany.service;
 
+import com.example.ShotAndShoot.domain.member.repository.MemberRepository;
+import com.example.ShotAndShoot.domain.member.service.MemberService;
+import com.example.ShotAndShoot.domain.wasteCompany.dto.ExtendedWasteCompanyDTO;
 import com.example.ShotAndShoot.domain.wasteCompany.dto.WasteCompanyResponseDTO;
 import com.example.ShotAndShoot.domain.wasteCompany.dto.WasteCompanyResponseDTO.WasteCompanyDTO;
+import com.example.ShotAndShoot.global.entity.Member;
 import io.micrometer.common.lang.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +26,9 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class WasteCompanyService {
+
+    private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     Map<String, Integer> dataMap = new HashMap<String, Integer>() {
         {
@@ -181,5 +188,59 @@ public class WasteCompanyService {
         }
 
         return new WasteCompanyResponseDTO(wasteCompanies);
+    }
+
+    @Transactional(readOnly = true)
+    public ExtendedWasteCompanyDTO getWasteCompany() throws URISyntaxException {
+        Optional<Member> member = memberRepository.findById(memberService.getLoginMemberId());
+        RestTemplate restTemplate = new RestTemplate();
+
+        String myAddr = "서울특별시 중구";
+        int code;
+
+        if(member.isPresent()) {
+            myAddr = member.get().getAddress();
+            code = dataMap.keySet().stream()
+                    .filter(myAddr::contains)
+                    .findFirst()
+                    .map(dataMap::get)
+                    .orElse(3010000);
+        } else {
+            code = 3010000;
+        }
+
+        String url = String.format("http://api.data.go.kr/openapi/tn_pubr_public_tret_was_api?numOfRows=1&instt_code=%d&type=json&serviceKey=%s", code, apiKey);
+        URI uri = new URI(url);
+        HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
+
+        ResponseEntity<Map> response = restTemplate.exchange(
+                uri,
+                HttpMethod.GET,
+                entity,
+                Map.class
+        );
+
+        Map<String, Object> wasteCompanyResponse = (Map<String, Object>) response.getBody().get("response");
+        Map<String, Object> wasteCompanyBody = (Map<String, Object>) wasteCompanyResponse.get("body");
+        List<Map<String, Object>> wasteCompanyItems = (List<Map<String, Object>>) wasteCompanyBody.get("items");
+        WasteCompanyDTO wasteCompanyDTO = null;
+
+        for (Map<String, Object> wasteCompany : wasteCompanyItems) {
+            String wasteCompanyName = (String) wasteCompany.get("flctNm");
+            String address = (String) wasteCompany.get("lctnRoadNmAddr");
+            String phoneNumber = (String) wasteCompany.get("telno");
+            String lat = (String) wasteCompany.get("lat");
+            String lot = (String) wasteCompany.get("lot");
+
+            wasteCompanyDTO = WasteCompanyDTO.builder()
+                    .wasteCompanyName(wasteCompanyName)
+                    .address(address)
+                    .phoneNumber(phoneNumber)
+                    .lat(lat)
+                    .lot(lot)
+                    .build();
+
+        }
+        return new ExtendedWasteCompanyDTO(wasteCompanyDTO, myAddr);
     }
 }

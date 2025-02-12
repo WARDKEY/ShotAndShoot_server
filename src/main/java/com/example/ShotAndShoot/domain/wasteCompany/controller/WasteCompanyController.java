@@ -1,5 +1,6 @@
 package com.example.ShotAndShoot.domain.wasteCompany.controller;
 
+import com.example.ShotAndShoot.domain.wasteCompany.dto.ExtendedWasteCompanyDTO;
 import com.example.ShotAndShoot.domain.wasteCompany.dto.WasteCompanyResponseDTO;
 import com.example.ShotAndShoot.domain.wasteCompany.service.WasteCompanyService;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +23,21 @@ public class WasteCompanyController {
     private final WasteCompanyService wasteCompanyService;
 
     /**
-     * 폐기물업체 조회
+     * 폐기물업체 조회(위치)
      */
     @GetMapping("/")
     public ResponseEntity<WasteCompanyResponseDTO> getAllWasteCompany(@RequestParam(value = "location", required = false) String location) throws URISyntaxException {
         WasteCompanyResponseDTO response = wasteCompanyService.getAllWasteCompany(location);
+        log.info(response.toString());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+    * 폐기물업체 조회(주소)
+    */
+    @GetMapping("/near")
+    public ResponseEntity<ExtendedWasteCompanyDTO> getWasteCompany() throws URISyntaxException {
+        ExtendedWasteCompanyDTO response = wasteCompanyService.getWasteCompany();
         log.info(response.toString());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
