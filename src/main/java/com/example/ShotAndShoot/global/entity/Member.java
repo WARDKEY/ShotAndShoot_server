@@ -6,7 +6,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "member")
@@ -19,7 +23,7 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
 
-    @Column(name= "id", nullable = false, unique = true)
+    @Column(name = "id", nullable = false, unique = true)
     private String id;
 
     @Column(name = "name", nullable = false)
@@ -43,4 +47,11 @@ public class Member {
         this.phoneNumber = phoneNumber;
     }
 
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updateAddress(String address) {
+        this.address = address;
+    }
 }
