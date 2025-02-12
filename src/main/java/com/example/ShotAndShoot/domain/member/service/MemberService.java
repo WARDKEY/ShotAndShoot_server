@@ -2,6 +2,7 @@ package com.example.ShotAndShoot.domain.member.service;
 
 import com.example.ShotAndShoot.domain.member.dto.LoginRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.LoginResponseDTO;
+import com.example.ShotAndShoot.domain.member.dto.MemberInfoRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberResponseDTO;
 import com.example.ShotAndShoot.domain.member.repository.MemberRepository;
@@ -128,5 +129,20 @@ public class MemberService {
             }
         }
         return false; // RefreshToken이 없음
+    }
+
+    @Transactional
+    public String modifyMemberInfo(MemberInfoRequestDTO memberInfoRequestDTO) {
+        // 로그인 한 사용자 찾은 뒤
+        Member member = memberRepository.findById(getLoginMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 회원이 존재하지 않습니다."));
+
+        // 사용자 정보 수정
+        member.updateName(memberInfoRequestDTO.getNickName());
+        member.updateAddress(memberInfoRequestDTO.getAddress());
+
+        memberRepository.save(member);
+
+        return "회원 정보 수정 완료.";
     }
 }

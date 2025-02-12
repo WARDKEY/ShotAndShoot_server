@@ -31,11 +31,19 @@ public class SecurityConfig {
                 .csrf((auth) -> auth.disable());
         http
                 .authorizeHttpRequests((auth) -> auth
-                .requestMatchers(HttpMethod.POST,"/api/v1/question/").authenticated()
-                .requestMatchers("/api/v1/waste/", "api/v1/member/", "api/v1/member/logout", "api/v1/member/unregister").authenticated() //마이페이지, 회원[정보수정, 탈퇴, 로그아웃], 게시글[작성,수정,삭제], 댓글[작성,삭제],
-                .anyRequest().permitAll());
+                        .requestMatchers(HttpMethod.POST, "/api/v1/question/", "api/v1/comment/{questionId}")
+                        .authenticated()
+                        .requestMatchers("/api/v1/waste/", "api/v1/member/", "api/v1/member/logout",
+                                "api/v1/member/unregister ", "api/v1/question/my", "api/v1/comment/my")
+                        .authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "api/v1/question/{questionId}",
+                                "api/v1/comment/{commentId}").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "api/v1/question/{questionId}", "api/v1/member/modify")
+                        .authenticated()
+                        .anyRequest().permitAll());
         http
-                .addFilterBefore(new JwtAuthenticationFilter(tokenProvider, memberService), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(tokenProvider, memberService),
+                        UsernamePasswordAuthenticationFilter.class);
         http
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));

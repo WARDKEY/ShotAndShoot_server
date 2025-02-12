@@ -2,6 +2,7 @@ package com.example.ShotAndShoot.domain.member.controller;
 
 import com.example.ShotAndShoot.domain.member.dto.LoginRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.LoginResponseDTO;
+import com.example.ShotAndShoot.domain.member.dto.MemberInfoRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberResponseDTO;
 import com.example.ShotAndShoot.domain.member.dto.UserIdResponseDTO;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -147,4 +149,19 @@ public class MemberController {
         String userId = memberService.getLoginMemberId();
         return new ResponseEntity<>(new UserIdResponseDTO(userId), HttpStatus.OK);
     }
+
+    /**
+     * 마이페이지 회원 정보 수정
+     *
+     * @param memberInfoRequestDTO
+     * @return
+     */
+    @PutMapping("/modify")
+    public ResponseEntity<ResultMessageDTO> modifyMemberInfo(@RequestBody
+                                                             MemberInfoRequestDTO memberInfoRequestDTO) {
+        String result = memberService.modifyMemberInfo(memberInfoRequestDTO);
+
+        return new ResponseEntity<>(new ResultMessageDTO(result), HttpStatus.OK);
+    }
+
 }
