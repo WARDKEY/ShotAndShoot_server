@@ -3,6 +3,7 @@ package com.example.ShotAndShoot.domain.member.service;
 import com.example.ShotAndShoot.domain.member.dto.LoginRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.LoginResponseDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberInfoRequestDTO;
+import com.example.ShotAndShoot.domain.member.dto.MemberInfoResponseDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberResponseDTO;
 import com.example.ShotAndShoot.domain.member.repository.MemberRepository;
@@ -144,5 +145,11 @@ public class MemberService {
         memberRepository.save(member);
 
         return "회원 정보 수정 완료.";
+    }
+
+    public MemberInfoResponseDTO getMemberNameAndAddress() {
+        Member member = memberRepository.findById(getLoginMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 회원이 존재하지 않습니다."));
+        return new MemberInfoResponseDTO(member.getName(), member.getAddress());
     }
 }
