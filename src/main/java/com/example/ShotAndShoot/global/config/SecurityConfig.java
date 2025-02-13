@@ -34,7 +34,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/question/", "api/v1/comment/{questionId}")
                         .authenticated()
                         .requestMatchers("/api/v1/waste/", "api/v1/member/", "api/v1/member/logout",
-                                "api/v1/member/unregister ", "api/v1/question/my", "api/v1/comment/my")
+                                "api/v1/member/unregister ", "api/v1/question/my", "api/v1/comment/my",
+                                "api/v1/member/info")
                         .authenticated()
                         .requestMatchers(HttpMethod.DELETE, "api/v1/question/{questionId}",
                                 "api/v1/comment/{commentId}").authenticated()

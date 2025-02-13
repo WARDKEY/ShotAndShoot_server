@@ -3,6 +3,7 @@ package com.example.ShotAndShoot.domain.member.controller;
 import com.example.ShotAndShoot.domain.member.dto.LoginRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.LoginResponseDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberInfoRequestDTO;
+import com.example.ShotAndShoot.domain.member.dto.MemberInfoResponseDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberResponseDTO;
 import com.example.ShotAndShoot.domain.member.dto.UserIdResponseDTO;
@@ -164,4 +165,13 @@ public class MemberController {
         return new ResponseEntity<>(new ResultMessageDTO(result), HttpStatus.OK);
     }
 
+    /**
+     * 회원 이름과 주소 조회
+     * @return
+     */
+    @GetMapping("/info")
+    public ResponseEntity<MemberInfoResponseDTO> getMemberNameAndAddress() {
+        MemberInfoResponseDTO memberInfoResponseDTO = memberService.getMemberNameAndAddress();
+        return new ResponseEntity<>(memberInfoResponseDTO, HttpStatus.OK);
+    }
 }
