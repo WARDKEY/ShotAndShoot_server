@@ -47,11 +47,9 @@ public class QuestionService {
         // 질문 저장
         questionRepository.save(question);
 
-        // ai 댓글 생성
-        String aiMessage = aiCommentService.saveAiComment(question.getQuestionId());
-
-        log.info("ai 댓글 성공 여부 확인 ==== {}", aiMessage);
-
+        // 비동기 AI 댓글 생성
+        aiCommentService.generateAiComment(question)
+                .thenAccept(aiMessage -> log.info("AI 댓글 생성 완료: {}", aiMessage));
         return question;
     }
 
