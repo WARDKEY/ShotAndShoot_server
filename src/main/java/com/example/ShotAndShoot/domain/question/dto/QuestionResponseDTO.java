@@ -1,6 +1,7 @@
 package com.example.ShotAndShoot.domain.question.dto;
 
 import com.example.ShotAndShoot.global.entity.Question;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.criteria.CriteriaBuilder.In;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ public class QuestionResponseDTO {
     private String category;
     private Integer view;
     private String member;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createAt;
     private Integer comments;
 
