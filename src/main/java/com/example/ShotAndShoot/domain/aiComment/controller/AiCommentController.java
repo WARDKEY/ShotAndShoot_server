@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.ExecutionException;
+
 @Slf4j
 @RequestMapping("/api/v1/ai")
 @RestController
@@ -31,13 +33,15 @@ public class AiCommentController {
      *
      * @param questionid
      */
+    /*
     @PostMapping("/{questionid}")
-    public ResponseEntity<ResultMessageDTO> saveAiComment(@PathVariable Long questionid) {
+    public ResponseEntity<ResultMessageDTO> saveAiComment(@PathVariable Long questionid) throws ExecutionException, InterruptedException {
 
-        String message = aiService.saveAiComment(questionid);
+        String message = aiService.generateAiComment(questionid).get();
         log.info(message);
         return new ResponseEntity<>(new ResultMessageDTO(message), HttpStatus.OK);
     }
+   */
 
     /**
      * question에 해당하는 Ai 댓글 조회
