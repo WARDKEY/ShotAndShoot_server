@@ -6,4 +6,5 @@ import lombok.Data;
 public class MemberInfoRequestDTO {
     private String nickName;
     private String address;
+    private String detailAddress;
 }

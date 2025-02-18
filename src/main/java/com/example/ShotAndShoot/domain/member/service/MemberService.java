@@ -33,6 +33,7 @@ public class MemberService {
                 .id(memberRequestDTO.getId())
                 .name(memberRequestDTO.getName())
                 .address(memberRequestDTO.getAddress())
+                .detailAddress(memberRequestDTO.getDetailAddress())
                 .phoneNumber(memberRequestDTO.getPhoneNumber())
                 .build();
         memberRepository.save(member);
@@ -141,6 +142,7 @@ public class MemberService {
         // 사용자 정보 수정
         member.updateName(memberInfoRequestDTO.getNickName());
         member.updateAddress(memberInfoRequestDTO.getAddress());
+        member.updatedetailAddress(memberInfoRequestDTO.getDetailAddress());
 
         memberRepository.save(member);
 
@@ -150,6 +152,6 @@ public class MemberService {
     public MemberInfoResponseDTO getMemberNameAndAddress() {
         Member member = memberRepository.findById(getLoginMemberId())
                 .orElseThrow(() -> new IllegalArgumentException("[ERROR] 회원이 존재하지 않습니다."));
-        return new MemberInfoResponseDTO(member.getName(), member.getAddress());
+        return new MemberInfoResponseDTO(member.getName(), member.getAddress(), member.getDetailAddress());
     }
 }

@@ -167,6 +167,7 @@ public class MemberController {
 
     /**
      * 회원 이름과 주소 조회
+     *
      * @return
      */
     @GetMapping("/info")

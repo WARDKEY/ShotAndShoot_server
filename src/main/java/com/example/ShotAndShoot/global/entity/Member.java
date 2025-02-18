@@ -36,6 +36,9 @@ public class Member {
     @Column(name = "address", nullable = false)
     private String address;
 
+    @Column(name = "detail_address", nullable = false)
+    private String detailAddress;
+
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
@@ -50,10 +53,11 @@ public class Member {
     private String refreshToken;
 
     @Builder
-    public Member(String id, String name, String address, String phoneNumber) {
+    public Member(String id, String name, String address, String detailAddress ,String phoneNumber) {
         this.id = id;
         this.name = name;
         this.address = address;
+        this.detailAddress = detailAddress;
         this.phoneNumber = phoneNumber;
     }
 
@@ -63,5 +67,9 @@ public class Member {
 
     public void updateAddress(String address) {
         this.address = address;
+    }
+
+    public void updatedetailAddress(String detailAddress) {
+        this.detailAddress = detailAddress;
     }
 }

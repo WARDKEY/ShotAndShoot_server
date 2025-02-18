@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class MemberInfoResponseDTO {
     private String nickName;
     private String address;
+    private String detailAddress;
 }
