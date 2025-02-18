@@ -16,6 +16,6 @@ public abstract class CreateTime {
 
     @CreatedDate
     @Column(name = "create_at")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createAt;
 }
