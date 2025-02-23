@@ -21,4 +21,11 @@ public class WasteService {
                 .map(WasteResponseDTO::new)
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public Waste getSortedWaste(String wasteName) {
+        return wasteRepository.findByWasteName(wasteName).orElseThrow(
+                () -> new IllegalArgumentException("해당되는 폐기물 정보가 없습니다.")
+        );
+    }
 }
