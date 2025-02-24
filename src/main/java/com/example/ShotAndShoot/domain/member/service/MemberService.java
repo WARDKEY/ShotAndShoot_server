@@ -7,7 +7,9 @@ import com.example.ShotAndShoot.domain.member.dto.MemberInfoResponseDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberRequestDTO;
 import com.example.ShotAndShoot.domain.member.dto.MemberResponseDTO;
 import com.example.ShotAndShoot.domain.member.repository.MemberRepository;
+import com.example.ShotAndShoot.domain.question.repository.QuestionRepository;
 import com.example.ShotAndShoot.global.entity.Member;
+import com.example.ShotAndShoot.global.entity.Question;
 import com.example.ShotAndShoot.global.jwt.TokenProvider;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
+    private final QuestionRepository questionRepository;
 
     @Transactional
     public String register(MemberRequestDTO memberRequestDTO) {
@@ -153,5 +156,16 @@ public class MemberService {
         Member member = memberRepository.findById(getLoginMemberId())
                 .orElseThrow(() -> new IllegalArgumentException("[ERROR] 회원이 존재하지 않습니다."));
         return new MemberInfoResponseDTO(member.getName(), member.getAddress(), member.getDetailAddress());
+    }
+
+    public boolean isAuthor(Long questionId) {
+        // 현재 로그인한 회원
+        Member member = memberRepository.findById(getLoginMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 회원이 존재하지 않습니다."));
+
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 존재하지 않는 게시글입니다."));
+
+        return question.getMember().getMemberId().equals(member.getMemberId());
     }
 }
