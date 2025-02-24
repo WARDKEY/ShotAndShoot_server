@@ -43,6 +43,12 @@ public class Question extends BaseTime {
     @Column(name = "view", nullable = false)
     private Integer view;
 
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Comment> comments;
+
+    @OneToOne(mappedBy = "question", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private AiComment aiComment;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
