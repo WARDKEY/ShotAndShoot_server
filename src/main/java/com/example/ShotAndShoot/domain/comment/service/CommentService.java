@@ -9,8 +9,11 @@ import com.example.ShotAndShoot.domain.question.repository.QuestionRepository;
 import com.example.ShotAndShoot.global.entity.Comment;
 import com.example.ShotAndShoot.global.entity.Member;
 import com.example.ShotAndShoot.global.entity.Question;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -53,8 +56,19 @@ public class CommentService {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException(questionId + "번 question이 존재하지 않습니다"));
 
+        // 현재 로그인한 회원
+        Optional<Member> member = memberRepository.findById(memberService.getLoginMemberId());
+
         return commentRepository.findAllByQuestion(question).stream()
-                .map(CommentResponseDTO::new)
+                .map(comment -> {
+                    boolean isAuthor = false;
+                    if (member.isEmpty() || !comment.getMember().getMemberId().equals(member.get().getMemberId())) {
+                        return new CommentResponseDTO(comment, isAuthor);
+                    } else {
+                        isAuthor = true;
+                        return new CommentResponseDTO(comment, isAuthor);
+                    }
+                })
                 .toList();
     }
 
@@ -99,6 +113,8 @@ public class CommentService {
         // 해당 사용자의 모든 댓글 불러오기
         List<Comment> myComments = commentRepository.findAllByMember(member);
 
-        return myComments.stream().map(CommentResponseDTO::new).toList();
+        return myComments.stream().map(comment -> {
+            return new CommentResponseDTO(comment, true);
+        }).toList();
     }
 }

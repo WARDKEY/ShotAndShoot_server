@@ -19,12 +19,14 @@ public class CommentResponseDTO {
     private String memberName;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdAt;
+    private Boolean isAuthor;
 
-    public CommentResponseDTO(Comment comment) {
+    public CommentResponseDTO(Comment comment, Boolean isAuthor) {
         this.commentId = comment.getCommentId();
         this.content = comment.getContent();
         this.questionId = comment.getQuestion().getQuestionId();
         this.memberName = comment.getMember().getName();
         this.createdAt = comment.getCreateAt();
+        this.isAuthor = isAuthor;
     }
 }
