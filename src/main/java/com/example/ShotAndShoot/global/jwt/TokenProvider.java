@@ -59,7 +59,7 @@ public class TokenProvider {
         } catch (ExpiredJwtException e) {
             return e.getClaims().getSubject();
         } catch (Exception e) {
-            throw new RuntimeException("Failed to parse token.");
+            return null;
         }
     }
 }

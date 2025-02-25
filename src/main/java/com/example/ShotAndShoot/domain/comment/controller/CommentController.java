@@ -44,7 +44,7 @@ public class CommentController {
     /**
      * question에 해당하는 댓글 조회
      */
-    @GetMapping("/{questionId}")
+    @GetMapping("{questionId}")
     public ResponseEntity<List<CommentResponseDTO>> getComments(@PathVariable Long questionId) {
         List<CommentResponseDTO> comments = commentService.getComments(questionId);
         return new ResponseEntity<>(comments, HttpStatus.OK);

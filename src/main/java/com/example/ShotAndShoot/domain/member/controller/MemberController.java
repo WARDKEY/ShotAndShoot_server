@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -180,12 +179,14 @@ public class MemberController {
 
     /**
      * 회원이 작성한 글인지 판단
+     *
      * @param questionId
      * @return
      */
     @GetMapping("/{questionId}/is-author")
-    public ResponseEntity<Boolean> isAuthor(@PathVariable Long questionId){
+    public ResponseEntity<Boolean> isAuthor(@PathVariable Long questionId) {
         boolean isAuthor = memberService.isAuthor(questionId);
         return ResponseEntity.ok(isAuthor);
     }
+
 }
