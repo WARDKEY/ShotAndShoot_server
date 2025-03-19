@@ -64,7 +64,7 @@
 ## 화면 구성
 | 메인 화면  |  폐기물 상세 화면   |
 | :-------------------------------------------: | :------------: |
-| <img src="https://github.com/user-attachments/assets/f9c6fad9-21a0-4acf-b212-e737ec36a4d4" width="320" height="700"> | <img src="https://github.com/user-attachments/assets/662bfffa-a7ba-458b-b93c-946fe49b3066" width="320" height="700"> |
+| ![image](https://github.com/user-attachments/assets/957c5a7f-0b40-433f-8556-43d1056c07e1) | <img src="https://github.com/user-attachments/assets/662bfffa-a7ba-458b-b93c-946fe49b3066" width="320" height="700"> |
 | 게시판 화면  |  게시글 상세 화면  |  
 | <img src="https://github.com/user-attachments/assets/1e8d7113-bf43-438e-a892-e0c3324d4f19" width="320" height="700"> | <img src="https://github.com/user-attachments/assets/daecc12b-05c5-4f61-906c-791d239a8bda" width="320" height="700"> |
 | 폐기물 스캔 화면 | 스캔 결과 화면 |
